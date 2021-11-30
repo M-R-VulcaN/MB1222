@@ -12,6 +12,7 @@ time.sleep(0.5)
 print("This are the devices which are available:\n---------------------------------------------------------")
 
 output = subprocess.check_output("i2cdetect -y 1", shell=True)
+output =  str(output).replace('\\n', '\n')
 print(output)
 
 print("---------------------------------------------------------\nNow you could change the sensor I2C address.\n---------------------------------------------------------")
@@ -40,11 +41,10 @@ if addressNew in range(111, 120):
  
   print("---------------------------------------------------------\nSearching for i2c devices...")
   time.sleep(0.5)
-  print("This are the devices which are available:")
-  dev.write_block_data(addressOld, 0xe0, [0xAA, 0xA5, addressNew])
-  print("---------------------------------------------------------")
+  print("This are the devices which are available:\n---------------------------------------------------------")
 
   output = subprocess.check_output("i2cdetect -y 1", shell=True)
+  output =  str(output).replace('\\n', '\n')
   print(output)
 else:
   os.system("clear")
