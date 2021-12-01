@@ -1,5 +1,11 @@
 # MB1222
 
+## Dependencies:
+
+- import smbus
+```
+pip install smbus2
+```
 ## Change address:
 - in order to change the address of each sensor individually, run `python3 change_address.py`
     - each sensor should have a unique address. (the default ip is "0x70")
@@ -62,4 +68,9 @@ b'     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 sudo chmod 777 /dev/i2c-1
 ```
 - in a seperate window we must have a `roscore` running in the background.
+- change/add the sensor addresses to the ones that you are using:
+```
+# sensor I2C address
+address = [0x71, 0x72]
+```
 - after running the previous commands, in order to publish the distance from the chosen sensors, run `python3 ultraSonicRos.py`.
