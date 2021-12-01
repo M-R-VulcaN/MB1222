@@ -12,7 +12,6 @@ import signal
 import sys
 import threading
 
-
 ###################################
 #  run: sudo chmod 777 /dev/i2c-1
 ###################################
@@ -41,7 +40,7 @@ def bit_publisher():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
-    print('Press Ctrl+C to stop')
+    print('Started ultraSonic publisher\nPress Ctrl+C to stop')
 
     rospy.init_node('ultraSonic_pub', anonymous=False)
 
@@ -52,8 +51,8 @@ if __name__ == "__main__":
     data = UInt16MultiArray()
     diagnostic_msg.status = [DiagnosticStatus(level=0, name='Permissions', message='ok'),
                              DiagnosticStatus(level=0, name='Connection', message='ok')]
-    bit_publisher()
 
+    bit_publisher()
 
     while(True):
         for i in range (len(address)):
@@ -63,17 +62,15 @@ if __name__ == "__main__":
                 time.sleep(0.1)
                 val = i2cbus.read_word_data(address[i], 0xe1)
 
-                
-
                 distance = (val >> 8) & 0xff | ((val & 0x3) << 8)
 
                 data.data.append(distance)
+
                 if i == 1:
                     ultraSonic.publish(data)
-                    print(data.data)
+                    # print(data.data)
                     data.data.clear()
-
-                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[i])
+                # print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[i])
             
             # permission error
             except PermissionError:
@@ -83,8 +80,4 @@ if __name__ == "__main__":
             except OSError:
                 change_diagnostic(1, "Sensor is not connected", 2)
 
-        # bitUltraSonic.publish(diagnostic_msg)
-
-    signal.pause()
-    rospy.spin()
 
