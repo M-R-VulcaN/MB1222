@@ -5,6 +5,8 @@ from std_msgs.msg import UInt16MultiArray
 import time
 
 import yaml
+import statistics
+
 
 
 #TODO: AVG
@@ -28,19 +30,25 @@ def read_from_yaml():
 
 def filter_data(data):
     if time.time() - filter_data.time >= WINDOW_TIME:
-        print(filter_data.data)
-        # call to the average function
+        print("first: " + str(filter_data.data[0]))
+        print("second: " + str(filter_data.data[1]))
 
-        for i in zip(range(filter_data.data[0])):
-            if filter_data.data[0][i]:
+        print("first: " + str(statistics.mean(filter_data.data[0])), " ,second: " + str(statistics.mean(filter_data.data[1])))
 
-
+        filter_data.data = tuple([],[])
         filter_data.time = time.time()
     else:
-        filter_data.data[0].append(data.data[0])
-        filter_data.data[1].append(data.data[1])
+        if filter_data.last == None:
+            filter_data.last = (data.data[0], data.data[1])
+
+        if abs(data.data[0] - filter_data.last[0]) < MAX_DISTANCE or abs(data.data[1] - filter_data.last[1]) < MAX_DISTANCE:
+            filter_data.data[0].append(data.data[0])
+            filter_data.data[1].append(data.data[1])
+
 filter_data.time = time.time()
-filter_data.data = tuple()
+filter_data.data = tuple([],[])
+filter_data.last = None
+
 
 def listener():
 

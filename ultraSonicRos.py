@@ -59,7 +59,7 @@ if __name__ == "__main__":
             try:
                 i2cbus = SMBus(1)
                 i2cbus.write_byte(address[i], 0x51)
-                time.sleep(0.1)
+
                 val = i2cbus.read_word_data(address[i], 0xe1)
 
                 distance = (val >> 8) & 0xff | ((val & 0x3) << 8)
