@@ -40,14 +40,14 @@ def bit_publisher():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
-    print('Started ultraSonic publisher\nPress Ctrl+C to stop')
+    print('Started ultra_sonic publisher\nPress Ctrl+C to stop')
 
     rospy.init_node('ultraSonic_pub', anonymous=False)
 
     rate = rospy.Rate(50) # 10hz
 
-    ultraSonic = rospy.Publisher('ultraSonic', UInt16MultiArray, queue_size=10)
-    bitUltraSonic = rospy.Publisher('bit/ultraSonic', DiagnosticArray, queue_size=10)
+    ultraSonic = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
+    bitUltraSonic = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
     data = UInt16MultiArray()
     diagnostic_msg.status = [DiagnosticStatus(level=0, name='Permissions', message='ok'),
                              DiagnosticStatus(level=0, name='Connection', message='ok')]
