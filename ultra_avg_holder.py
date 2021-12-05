@@ -12,12 +12,11 @@ import yaml
 
 
 #TODO: move those params in to a file. (yaml?)
-WINDOW_TIME = 3     #in seconds
-MAX_DISTANCE = 210  #in cm
-MIN_DISTANCE = 20   #in cm
+WINDOW_TIME = 0     #in seconds
+MAX_DISTANCE = 0    #in cm
+MIN_DISTANCE = 0    #in cm
 
-
-yaml_file_full_path = "/home/makeruser/MB1222/params.yaml"
+yaml_file_full_path = "params.yaml"
 
 def read_from_yaml():
     global WINDOW_TIME, MAX_DISTANCE, MIN_DISTANCE
@@ -29,19 +28,27 @@ def read_from_yaml():
 
 def filter_data(data):
     if time.time() - filter_data.time >= WINDOW_TIME:
-        print (filter_data.data)
+        print(filter_data.data)
+        # call to the average function
+
+        for i in zip(range(filter_data.data[0])):
+            if filter_data.data[0][i]:
+
+
         filter_data.time = time.time()
     else:
-        filter_data.append(data)
+        filter_data.data[0].append(data.data[0])
+        filter_data.data[1].append(data.data[1])
 filter_data.time = time.time()
-filter_data.data = list()
+filter_data.data = tuple()
 
 def listener():
+
     rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber("ultraSonic_pub", UInt16MultiArray , filter_data)
-    
     read_from_yaml()
+
+    rospy.Subscriber("ultra_sonic/out/raw", UInt16MultiArray , filter_data)
 
     rospy.spin()
 
