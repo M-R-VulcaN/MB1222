@@ -41,7 +41,7 @@ def filter_data(data):
         if filter_data.last == None:
             filter_data.last = (data.data[0], data.data[1])
 
-        if abs(data.data[0] - filter_data.last[0]) < MAX_DISTANCE or abs(data.data[1] - filter_data.last[1]) < MAX_DISTANCE:
+        if abs(data.data[0] - filter_data.last[0]) < MAX_DISTANCE and abs(data.data[1] - filter_data.last[1]) < MAX_DISTANCE:
             filter_data.data[0].append(data.data[0])
             filter_data.data[1].append(data.data[1])
 
