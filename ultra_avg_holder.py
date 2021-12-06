@@ -35,7 +35,7 @@ def filter_data(data):
 
         print("first: " + str(statistics.mean(filter_data.data[0])), " ,second: " + str(statistics.mean(filter_data.data[1])))
 
-        filter_data.data = tuple([],[])
+        filter_data.data = ([],[])
         filter_data.time = time.time()
     else:
         if filter_data.last == None:
@@ -46,7 +46,7 @@ def filter_data(data):
             filter_data.data[1].append(data.data[1])
 
 filter_data.time = time.time()
-filter_data.data = tuple([],[])
+filter_data.data = ([],[])
 filter_data.last = None
 
 

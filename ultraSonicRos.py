@@ -17,7 +17,7 @@ import threading
 ###################################
 
 # sensor I2C address
-address = [0x71, 0x72]
+address = [0x72, 0x73]
 
 interval = 0.005
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     rospy.init_node('ultraSonic_pub', anonymous=False)
 
-    rate = rospy.Rate(50) # 10hz
+    rate = rospy.Rate(35) #hz
 
     ultraSonic = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
     bitUltraSonic = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
@@ -54,24 +54,26 @@ if __name__ == "__main__":
 
     bit_publisher()
 
-    while(True):
-        for i in range (len(address)):
+    i2cbus = SMBus(1)
+    while(not rospy.is_shutdown()):
             try:
-                i2cbus = SMBus(1)
-                i2cbus.write_byte(address[i], 0x51)
-
-                val = i2cbus.read_word_data(address[i], 0xe1)
+                i2cbus.write_byte(address[0], 0x51)
+                i2cbus.write_byte(address[1], 0x51)
+                time.sleep(0.015)
+                val = i2cbus.read_word_data(address[0], 0xe1)
+                val1 = i2cbus.read_word_data(address[1], 0xe1)
 
                 distance = (val >> 8) & 0xff | ((val & 0x3) << 8)
+                distance1 = (val1 >> 8) & 0xff | ((val1 & 0x3) << 8)
 
                 data.data.append(distance)
+                data.data.append(distance1)
 
-                if i == 1:
-                    ultraSonic.publish(data)
-                    # print(data.data)
-                    data.data.clear()
-                # print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[i])
-            
+                ultraSonic.publish(data)
+                 # print(data.data)
+                data.data.clear()
+                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[0])
+                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[1])
             # permission error
             except PermissionError:
                 change_diagnostic(0, "run: sudo chmod 777 /dev/i2c-1", 2)
@@ -79,5 +81,5 @@ if __name__ == "__main__":
             # connection error
             except OSError:
                 change_diagnostic(1, "Sensor is not connected", 2)
-
+            rate.sleep()
 
