@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     rospy.init_node('ultraSonic_pub', anonymous=False)
 
-    rate = rospy.Rate(35) #hz
+    rate = rospy.Rate(rospy.get_param("rate", 30)) #hz
 
     ultraSonic = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
     bitUltraSonic = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
