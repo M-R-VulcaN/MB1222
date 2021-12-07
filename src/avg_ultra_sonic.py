@@ -8,31 +8,27 @@ import yaml
 import statistics
 
 
+#TODO: add roslaunch to params
+BUNCH_TIME = 3     #in seconds
+THRESHOLD = 25    #in cm
 
-#TODO: AVG
-#TODO: value_threshhold
-
-
-#TODO: move those params in to a file. (yaml?)
-BUNCH_TIME = 0     #in seconds
-MAX_JUMP = 0    #in cm
-
-yaml_file_full_path = "params.yaml"
 
 def filter_data(data):
     if time.time() - filter_data.time >= BUNCH_TIME:
-        print("first: " + str(filter_data.data[0]))
-        print("second: " + str(filter_data.data[1]))
+        if filter_data.data[0] and filter_data.data[1]:
+            print("first: " + str(filter_data.data[0]))
+            print("second: " + str(filter_data.data[1]))
 
-        print("first: " + str(statistics.mean(filter_data.data[0])), " ,second: " + str(statistics.mean(filter_data.data[1])))
+            filter_data.last = (statistics.mean(filter_data.data[0]), statistics.mean(filter_data.data[1]))
+            print("first: " + str(filter_data.last[0]), " ,second: " + str(filter_data.last[1]))
 
         filter_data.data = ([],[])
         filter_data.time = time.time()
     else:
-        if filter_data.last == None:
+        if not filter_data.last:
             filter_data.last = (data.data[0], data.data[1])
 
-        if abs(data.data[0] - filter_data.last[0]) < MAX_JUMP and abs(data.data[1] - filter_data.last[1]) < MAX_JUMP:
+        if abs(data.data[0] - filter_data.last[0]) < THRESHOLD and abs(data.data[1] - filter_data.last[1]) < THRESHOLD:
             filter_data.data[0].append(data.data[0])
             filter_data.data[1].append(data.data[1])
 

@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     rospy.init_node('ultraSonic_pub', anonymous=False)
 
-    rate = rospy.Rate(rospy.get_param("rate", 30)) #hz
+    rate = rospy.Rate(30)  #hz
 
     ultraSonic = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
     bitUltraSonic = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
@@ -72,8 +72,8 @@ if __name__ == "__main__":
                 ultraSonic.publish(data)
                  # print(data.data)
                 data.data.clear()
-                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[0])
-                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[1])
+#                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[0])
+#                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[1])
             # permission error
             except PermissionError:
                 change_diagnostic(0, "run: sudo chmod 777 /dev/i2c-1", 2)
