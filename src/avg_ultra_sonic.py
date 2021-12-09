@@ -4,7 +4,6 @@ from std_msgs.msg import UInt16MultiArray
 
 import time
 
-import yaml
 import statistics
 
 
