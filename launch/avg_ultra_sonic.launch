@@ -1,9 +1,9 @@
 <launch>
   <arg name="bunch_time" default="3" />
-  <arg name="treshold" default="25" />
+  <arg name="threshold" default="25" />
 
   <node name="avg_ultra_sonic" pkg="MB1222" type="avg_ultra_sonic.py" output="screen" >
     <param name="bunch_time" value="$(arg bunch_time)" />
-    <param name="treshold" value="$(arg treshold)" />
+    <param name="threshold" value="$(arg threshold)" />
   </node>
 </launch>
