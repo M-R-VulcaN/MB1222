@@ -1,7 +1,7 @@
 <launch>
   <arg name="rate" default="30" />
 
-  <node name="ultra_sonic" pkg="MB1222" type="ultra_sonic.py" output="screen" >
+  <node name="ultra_sonic" pkg="mb1222" type="ultra_sonic.py" >
     <param name="rate" value="$(arg rate)" />
   </node>
 </launch>

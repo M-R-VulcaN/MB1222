@@ -37,7 +37,7 @@ filter_data.last = None
 def listener():
     global BUNCH_TIME, THRESHOLD
     rospy.init_node('avg_ultra_sonic', anonymous=True)
-    BUNCH_TIME = rospy.get_param("~bunch_time", 3)     
+    BUNCH_TIME = rospy.get_param("~window_time", 3)     
     THRESHOLD = rospy.get_param("~threshold", 25)  
 
     rospy.Subscriber("ultra_sonic/out/raw", UInt16MultiArray , filter_data)
