@@ -7,8 +7,12 @@ import time
 import statistics
 
 
-def filter_data(data, bunch_time, threshold):
-    if time.time() - filter_data.time >= bunch_time:
+BUNCH_TIME = 0     #in seconds
+THRESHOLD = 0    #in cm
+
+
+def filter_data(data):
+    if time.time() - filter_data.time >= BUNCH_TIME:
         if filter_data.data[0] and filter_data.data[1]:
             print("first: " + str(filter_data.data[0]))
             print("second: " + str(filter_data.data[1]))
@@ -19,10 +23,10 @@ def filter_data(data, bunch_time, threshold):
         filter_data.data = ([],[])
         filter_data.time = time.time()
     else:
-        if not filter_data.last and abs(data.data[0] - data.data[1]) < threshold:
+        if not filter_data.last and abs(data.data[0] - data.data[1]) < THRESHOLD:
             filter_data.last = (data.data[0], data.data[1])
 
-        if filter_data.last and abs(data.data[0] - filter_data.last[0]) < threshold and abs(data.data[1] - filter_data.last[1]) < threshold:
+        if filter_data.last and abs(data.data[0] - filter_data.last[0]) < THRESHOLD and abs(data.data[1] - filter_data.last[1]) < THRESHOLD:
             filter_data.data[0].append(data.data[0])
             filter_data.data[1].append(data.data[1])
 filter_data.time = time.time()
@@ -31,11 +35,12 @@ filter_data.last = None
 
 
 def listener():
-
+    global BUNCH_TIME, THRESHOLD
     rospy.init_node('avg_ultra_sonic', anonymous=True)
-    bunch_time = rospy.get_param("~bunch_time", 3)     #in seconds
-    threshold = rospy.get_param("~threshold", 25)  
-    rospy.Subscriber("ultra_sonic/out/raw", UInt16MultiArray , filter_data, bunch_time, threshold)
+    BUNCH_TIME = rospy.get_param("~bunch_time", 3)     #in seconds
+    THRESHOLD = rospy.get_param("~threshold", 25)  
+
+    rospy.Subscriber("ultra_sonic/out/raw", UInt16MultiArray , filter_data)
 
     rospy.spin()
 
