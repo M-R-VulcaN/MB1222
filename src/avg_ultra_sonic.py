@@ -39,7 +39,7 @@ filter_data.last = None
 
 def listener():
 
-    rospy.init_node('listener', anonymous=True)
+    rospy.init_node('avg_ultra_sonic', anonymous=True)
 
     rospy.Subscriber("ultra_sonic/out/raw", UInt16MultiArray , filter_data)
 

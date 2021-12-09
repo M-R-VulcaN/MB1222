@@ -42,7 +42,7 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     print('Started ultra_sonic publisher\nPress Ctrl+C to stop')
 
-    rospy.init_node('ultraSonic_pub', anonymous=False)
+    rospy.init_node('ultra_sonic', anonymous=False)
 
     rate = rospy.Rate(30)  #hz
 
