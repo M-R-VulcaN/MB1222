@@ -15,7 +15,7 @@ def filter_data(data):
     
     if time.time() - filter_data.time >= BUNCH_TIME:
         if filter_data.data[0] and filter_data.data[1]:
-            filter_data.last = (statistics.mean(filter_data.data[0]), statistics.mean(filter_data.data[1]))
+            filter_data.last = (int(statistics.mean(filter_data.data[0])), int(statistics.mean(filter_data.data[1])))
 
             avg.data = filter_data.last
             avg_publisher.publish(avg)
