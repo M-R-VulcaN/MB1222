@@ -54,9 +54,10 @@ if __name__ == "__main__":
 
     bit_publisher()
 
-    i2cbus = SMBus(1)
     while(not rospy.is_shutdown()):
             try:
+                i2cbus = SMBus(1)
+                
                 i2cbus.write_byte(address[0], 0x51)
                 i2cbus.write_byte(address[1], 0x51)
                 time.sleep(0.015)
