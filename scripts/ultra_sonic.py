@@ -35,7 +35,7 @@ def bit_publisher():
     t = threading.Timer(1.0, bit_publisher)
     t.daemon = True
     t.start()
-    bitUltraSonic.publish(diagnostic_msg)
+    bit_ultra_sonic_publisher.publish(diagnostic_msg)
     change_diagnostic(0)
     change_diagnostic(1)
 
@@ -46,8 +46,8 @@ if __name__ == "__main__":
 
     rospy.init_node('ultra_sonic', anonymous=False)
     rate = rospy.Rate(rospy.get_param("~rate", 30))  #hz
-    ultraSonic = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
-    bitUltraSonic = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
+    ultra_sonic_publisher = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
+    bit_ultra_sonic_publisher = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
     data = UInt16MultiArray()
     diagnostic_msg.status = [DiagnosticStatus(level=0, name='Permissions', message='ok'),
                              DiagnosticStatus(level=0, name='Connection', message='ok')]
@@ -61,16 +61,16 @@ if __name__ == "__main__":
                 i2cbus.write_byte(address[0], 0x51)
                 i2cbus.write_byte(address[1], 0x51)
                 time.sleep(0.015)
+
                 val = i2cbus.read_word_data(address[0], 0xe1)
                 val1 = i2cbus.read_word_data(address[1], 0xe1)
 
                 distance = (val >> 8) & 0xff | ((val & 0x3) << 8)
                 distance1 = (val1 >> 8) & 0xff | ((val1 & 0x3) << 8)
 
-                data.data.append(distance)
-                data.data.append(distance1)
+                data.data = [distance, distance1]
 
-                ultraSonic.publish(data)
+                ultra_sonic_publisher.publish(data)
                  # print(data.data)
                 data.data.clear()
 #                print((val >> 8) & 0xff | ((val & 0x3) << 8), "cm","   |     from address: ",address[0])
