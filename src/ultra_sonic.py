@@ -32,7 +32,10 @@ def change_diagnostic(index, msg = "ok", level = 0):
     diagnostic_msg.status[index].level = level
 
 def bit_publisher():
-    threading.Timer(1.0, bit_publisher).start()
+    #threading.Timer(1.0, bit_publisher).start()
+    t = threading.Timer(1.0, bit_publisher)
+    t.daemon = True
+    t.start()
     bitUltraSonic.publish(diagnostic_msg)
     change_diagnostic(0)
     change_diagnostic(1)
@@ -43,9 +46,7 @@ if __name__ == "__main__":
     print('Started ultra_sonic publisher\nPress Ctrl+C to stop')
 
     rospy.init_node('ultra_sonic', anonymous=False)
-
-    rate = rospy.Rate(rospy.get_param("~rate", 3))  #hz
-
+    rate = rospy.Rate(rospy.get_param("~rate", 30))  #hz
     ultraSonic = rospy.Publisher('ultra_sonic/out/raw', UInt16MultiArray, queue_size=10)
     bitUltraSonic = rospy.Publisher('bit/ultra_sonic', DiagnosticArray, queue_size=10)
     data = UInt16MultiArray()
