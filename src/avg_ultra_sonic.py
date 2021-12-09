@@ -23,12 +23,15 @@ def filter_data(data):
         filter_data.data = ([],[])
         filter_data.time = time.time()
     else:
-        if not filter_data.last:
+        if not filter_data.last and abs(data.data[0] - data.data[1]) < THRESHOLD:
             filter_data.last = (data.data[0], data.data[1])
 
-        if abs(data.data[0] - filter_data.last[0]) < THRESHOLD and abs(data.data[1] - filter_data.last[1]) < THRESHOLD:
+        if filter_data.last and abs(data.data[0] - filter_data.last[0]) < THRESHOLD and abs(data.data[1] - filter_data.last[1]) < THRESHOLD:
             filter_data.data[0].append(data.data[0])
             filter_data.data[1].append(data.data[1])
+
+
+
 
 filter_data.time = time.time()
 filter_data.data = ([],[])
