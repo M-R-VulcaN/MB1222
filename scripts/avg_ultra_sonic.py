@@ -18,7 +18,7 @@ def filter_data(data):
             filter_data.last = (statistics.mean(filter_data.data[0]), statistics.mean(filter_data.data[1]))
 
             avg.data = filter_data.last
-            avg_publisher.publish(data)
+            avg_publisher.publish(avg)
 
         filter_data.data = ([],[])
         filter_data.time = time.time()
