@@ -32,7 +32,6 @@ def change_diagnostic(index, msg = "ok", level = 0):
     diagnostic_msg.status[index].level = level
 
 def bit_publisher():
-    #threading.Timer(1.0, bit_publisher).start()
     t = threading.Timer(1.0, bit_publisher)
     t.daemon = True
     t.start()
