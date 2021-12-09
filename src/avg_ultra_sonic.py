@@ -7,9 +7,8 @@ import time
 import statistics
 
 
-#TODO: add roslaunch to params
-BUNCH_TIME = 3     #in seconds
-THRESHOLD = 25    #in cm
+BUNCH_TIME = rospy.get_param("~bunch_time", 3)     #in seconds
+THRESHOLD = rospy.get_param("~threshold", 25)     #in cm
 
 
 def filter_data(data):
